@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Árvore da Vida FDN - NASEM 2021</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .tree-container {
+            width: 800px;
+            height: 600px;
+            position: relative;
+        }
+        .node {
+            position: absolute;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .node:hover {
+            transform: scale(1.1);
+        }
+        .line {
+            position: absolute;
+            background-color: #4CAF50;
+            transform-origin: 0 50%;
+        }
+        .info-box {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="tree-container" id="tree">
+        <div class="info-box" id="info-box"></div>
+    </div>
+
+    <script>
+        const nodes = [
+            { id: 'digestibilidade', label: 'Digestibilidade', size: 80, x: 400, y: 300 },
+            { id: 'fermentacao', label: 'Fermentação Ruminal', size: 60, x: 200, y: 150 },
+            { id: 'ph', label: 'pH Ruminal', size: 60, x: 600, y: 150 },
+            { id: 'ingestao', label: 'Ingestão de Matéria Seca', size: 60, x: 200, y: 450 },
+            { id: 'producao', label: 'Produção de Leite', size: 60, x: 600, y: 450 },
+            { id: 'retencao', label: 'Tempo de Retenção', size: 50, x: 100, y: 300 },
+            { id: 'nutrientes', label: 'Utilização de Nutrientes', size: 50, x: 700, y: 300 },
+        ];
+
+        const tree = document.getElementById('tree');
+        const infoBox = document.getElementById('info-box');
+
+        nodes.forEach(node => {
+            const nodeElement = document.createElement('div');
+            nodeElement.className = 'node';
+            nodeElement.style.width = `${node.size}px`;
+            nodeElement.style.height = `${node.size}px`;
+            nodeElement.style.left = `${node.x - node.size/2}px`;
+            nodeElement.style.top = `${node.y - node.size/2}px`;
+            nodeElement.textContent = node.label;
+            nodeElement.addEventListener('click', () => showInfo(node));
+            tree.appendChild(nodeElement);
+
+            if (node.id !== 'digestibilidade') {
+                const line = document.createElement('div');
+                line.className = 'line';
+                const dx = node.x - 400;
+                const dy = node.y - 300;
+                const length = Math.sqrt(dx*dx + dy*dy);
+                const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                line.style.width = `${length}px`;
+                line.style.height = '2px';
+                line.style.left = '400px';
+                line.style.top = '300px';
+                line.style.transform = `rotate(${angle}deg)`;
+                tree.appendChild(line);
+            }
+        });
+
+        function showInfo(node) {
+            let info = '';
+            switch(node.id) {
+                case 'digestibilidade':
+                    info = 'A digestibilidade da FDN é crucial para seu valor nutricional e afeta vários outros aspectos da nutrição de vacas leiteiras.';
+                    break;
+                case 'fermentacao':
+                    info = 'A digestibilidade afeta diretamente a fermentação ruminal, influenciando a produção de ácidos graxos voláteis.';
+                    break;
+                case 'ph':
+                    info = 'A digestibilidade da FDN pode influenciar o pH ruminal, afetando o ambiente para os microrganismos do rúmen.';
+                    break;
+                case 'ingestao':
+                    info = 'A digestibilidade da FDN está relacionada à ingestão de matéria seca, afetando a saciedade e o consumo total.';
+                    break;
+                case 'producao':
+                    info = 'A digestibilidade da FDN pode afetar a produção de leite, influenciando a disponibilidade de energia e nutrientes.';
+                    break;
+                case 'retencao':
+                    info = 'A digestibilidade afeta o tempo de retenção no rúmen, influenciando a eficiência da utilização dos nutrientes.';
+                    break;
+                case 'nutrientes':
+                    info = 'A digestibilidade da FDN está diretamente relacionada à eficiência da utilização dos nutrientes pelo animal.';
+                    break;
+            }
+            infoBox.textContent = info;
+            infoBox.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
